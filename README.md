@@ -1,10 +1,16 @@
 ## Machine Learning Fine Tuner
 Fine-tune and optimize your machine learning models effortlessly. It provides a user-friendly interface for tuning various parameters, selecting the best algorithms, and enhancing model performance. Whether you're a beginner or an experienced data scientist, It empowers you to unlock the full potential of your predictive models with ease.
 
-#### Overview
+
+### Overview
 The Machine Learning Fine Tuner is a Streamlit web application designed to streamline the process of building, training, and fine-tuning machine learning models. It allows users to upload preprocessed CSV datasets, select dependent and independent features, choose from a variety of machine learning algorithms, and make predictions using the trained models.
 
-#### Features
+
+### Screenshots
+!["Image"](screenshots/1.png)
+
+
+### Features
 - **Dataset Overview:** View the head, tail, and summary statistics of the uploaded dataset.
 - **Feature Selection:** Select dependent and independent features from the dataset.
 - **Correlation Matrix:** Visualize the correlation between numerical features using an interactive heatmap.
@@ -14,7 +20,7 @@ The Machine Learning Fine Tuner is a Streamlit web application designed to strea
 - **Model Evaluation:** Evaluate the performance of the selected machine learning algorithm using various metrics such as accuracy, precision, recall, F1-score, and RMSE.
 - **Model Deployment:** Save the trained model and download it for future use.
 
-#### Usage
+### Usage
 1. **Upload Data:** Upload a preprocessed CSV file containing the dataset.
 2. **Select Features:** Choose the dependent and independent features for the analysis.
 3. **Explore Data:** View the dataset overview, correlation matrix, and summary statistics.
@@ -24,14 +30,14 @@ The Machine Learning Fine Tuner is a Streamlit web application designed to strea
 7. **Make Predictions:** Use the trained model to make predictions on new data.
 8. **Save Model:** Save the trained model and download it for future use.
 
-#### Technologies Used
+### Technologies Used
 - Python
 - Streamlit
 - Pandas
 - Scikit-learn
 - Plotly
 
-#### Installation
+### Installation
 1. Clone the repository:
 
 ```
