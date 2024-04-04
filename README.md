@@ -7,7 +7,7 @@ The Machine Learning Fine Tuner is a Streamlit web application designed to strea
 
 
 ### Screenshots
-!["Image"](screenshots/1.png)
+!["Image"](Screenshots/1.png)
 
 
 ### Features
