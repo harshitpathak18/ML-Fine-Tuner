@@ -21,7 +21,7 @@ The Machine Learning Fine Tuner is a Streamlit web application designed to strea
 !["Image"](Screenshots/12.png)
 
 ### LinkedIn Demo Video
-[https://www.linkedin.com/posts/harshitpathak18_machinelearning-datascience-modeldevelopment-activity-7181559439185903616-Zv0z?utm_source=share&utm_medium=member_desktop]
+[https://www.linkedin.com/posts/harshitpathak18_machinelearning-datascience-modeldevelopment-activity-7182302778734620672-YhLd?utm_source=share&utm_medium=member_android]
 
 ### Features
 - **Dataset Overview:** View the head, tail, and summary statistics of the uploaded dataset.
