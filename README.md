@@ -42,6 +42,8 @@ The Machine Learning Fine Tuner is a Streamlit web application designed to strea
 6. **Select Algorithm:** Choose the desired machine learning algorithm for training the model.
 7. **Make Predictions:** Use the trained model to make predictions on new data.
 8. **Save Model:** Save the trained model and download it for future use.
+9. **Visualize ML Algorithms:** Can easily visuals different ML Algorithms
+10. **Luna**: It is an AI chatbot, answers all questions related to machine learning.
 
 ### Technologies Used
 - Python
