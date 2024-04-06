@@ -1,0 +1,16 @@
+Instruction to run this web app
+
+1. Create virtual environment with python version>=3.11 
+	conda create --name environment_name python=3.12
+
+
+2. Activate virtual environment
+	conda activate environment_name
+
+
+3. Install all requirements from requirements. txt
+	pip intall -r requirements.txt	
+	
+
+4. Run app.py using command-
+	streamlit run app.py

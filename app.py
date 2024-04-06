@@ -3,37 +3,56 @@ import pickle
 import pandas as pd
 import streamlit as st
 from io import StringIO
+# from ai_bot import bot
 import plotly.figure_factory as ff
 from sklearn.pipeline import Pipeline
+from sklearn.datasets import make_regression
 from sklearn.compose import ColumnTransformer
+from streamlit_option_menu import option_menu
 from sklearn.model_selection import train_test_split
 from mlxtend.plotting import plot_decision_regions, plot_learning_curves
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, LabelEncoder
 
 
+import plotly.express as px
+import plotly.graph_objects as go
+from datasets import Regression_Datasets, Classification_Datasets
+from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
+from sklearn.neighbors import  KNeighborsClassifier, KNeighborsRegressor
+from sklearn.svm import SVC, SVR
+from xgboost import XGBClassifier, XGBRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, AdaBoostClassifier, AdaBoostRegressor, GradientBoostingRegressor, GradientBoostingClassifier 
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, LogisticRegressionCV
+from sklearn.metrics import accuracy_score
+
+
 # Importing ML Alorithm Implementation
-from Logistics_regression import Logistics_regression_implementation
-from Knn import Knn_classification_implementation, Knn_Regression_Implementation
-from Svm import Svm_classification_implementation, Svm_regression_implementation
-from XGBoost import XGBoost_Classifier_Implementation, XGBoost_Regressor_Implementation
-from AdaBoost import AdaBoost_Classifier_Implementation, AdaBoost_Regressor_Implementation
-from DecisionTree import Decision_Tree_Classifier_Implementation, Decision_Tree_Regressor_Implementation
-from RandomForest import Random_Forest_Classifier_Implementation, Random_Forest_Regressor_Implementation
-from GradientBoosting import Gradient_Boosting_Classifier_Implementation, Gradient_Boosting_Regressor_Implementation
-from Linear_regression import Linear_Regression_Implementation, Ridge_Regression_Implementation, Lasso_Regression_Implementation
+from metrics import regression_visulizer, classifier_metrics, classification_visualizer
+from NaiveBayes import NaiveBayes_implementation, NaiveBayes_sidebar
+from Logistics_regression import Logistics_regression_implementation, Logistics_sidebar
+from Knn import Knn_classification_implementation, Knn_Regression_Implementation, Knn_sidebar_classifier, Knn_sidebar_regressor
+from Svm import Svm_classification_implementation, Svm_regression_implementation, Svm_regression_sidebar, Svm_sidebar_classifier
+from XGBoost import XGBoost_Classifier_Implementation, XGBoost_Regressor_Implementation, XGBoost_Classifier_Sidebar, XGBoost_Regressor_Sidebar
+from AdaBoost import AdaBoost_Classifier_Implementation, AdaBoost_Regressor_Implementation, AdaBoost_Classifier_Sidebar, AdaBoost_Regressor_Sidebar
+from DecisionTree import Decision_Tree_Classifier_Implementation, Decision_Tree_Regressor_Implementation, Decision_Tree_Regressor_Sidebar, Decision_Tree_Classifier_Sidebar
+from RandomForest import Random_Forest_Classifier_Implementation, Random_Forest_Regressor_Implementation, Random_Forest_Classifier_Sidebar, Random_Forest_Regressor_Sidebar
+from GradientBoosting import Gradient_Boosting_Classifier_Implementation, Gradient_Boosting_Regressor_Implementation, Gradient_Boosting_Classifier_Sidebar, Gradient_Boosting_Regressor_Sidebar
+from Linear_regression import Linear_Regression_Implementation, Ridge_Regression_Implementation, Lasso_Regression_Implementation, Ridge_Regression_Sidebar, Lasso_Regression_Sidebar
 
 
 # Function to style streamlit page
 def streamlit_style():
     st.markdown("""
     <style>
+        
         .st-emotion-cache-16txtl3{
             padding:1rem 1.5rem;
         }
 
         .st-emotion-cache-1y4p8pa {
-            padding:2rem 1rem 10rem;
-            max-width: 65rem
+            padding:0rem 1rem 5rem;
+            max-width: 75rem
         }   
 
         .st-emotion-cache-uf99v8 {
@@ -56,12 +75,12 @@ def streamlit_style():
             font-weight:800;
         }
 
-        .st-hf {
+        .st-hf{
             background: linear-gradient(to right, rgb(255, 75, 75) 0%, rgb(255, 75, 75) 47.3684%, rgba(172, 177, 195, 0.25) 47.3684%, rgba(172, 177, 195, 0.25) 100%);
         }
         
         /*Cvs file uploader*/
-        .st-emotion-cache-1erivf3,.st-da, .st-emotion-cache-1erivf3, .st-ek, .st-gf{
+        .st-emotion-cache-1erivf3,.st-da, .st-emotion-cache-1erivf3, .st-ek, .st-gf, .st-hf, .st-am{
             background-image: linear-gradient(to right top, #1d3354, #25537b, #2576a2, #1e9bc8, #12c2eb);
         }
 
@@ -74,6 +93,11 @@ def streamlit_style():
         .st-emotion-cache-19rxjzo{
             background-color:white;
         }  
+
+        /*.st-emotion-cache-1avcm0n {
+            display: none !important;
+        }*/
+        
         
     </style>
     """, unsafe_allow_html=True)
@@ -198,11 +222,8 @@ def predictions(independent_features, numerical_features, categorical_features, 
 
 
 
-
 # main
 def main():
-    st.markdown("<h1><center>Machine Learning Fine Tuner</center></h1>",unsafe_allow_html=True)
-    st.title("")
     uploaded_file = st.file_uploader("Upload Preprocessed CSV File", type=['csv'])
 
     if uploaded_file is not None:
@@ -294,7 +315,7 @@ def main():
                 
                 if len(y.unique())<20:
                     # Select Algorithm
-                    model = st.selectbox("Select Machine Learning Algorithm", ['Logistics Regression','K-Nearest Neighbour Classifier','Support Vector Machine Classifier','Decision Tree Classifier', "Random Forest Classifier", "Gradient Boosting Classifier", "AdaBoost Classifier", "XGBoost Classifier"])
+                    model = st.selectbox("Select Machine Learning Algorithm", ['Logistics Regression',"Naive Bayes Classifier",'K-Nearest Neighbour Classifier','Support Vector Machine Classifier','Decision Tree Classifier', "Random Forest Classifier", "Gradient Boosting Classifier", "AdaBoost Classifier", "XGBoost Classifier"])
                     st.markdown(f"<br><h2><center>{model}</h2></center><br>",unsafe_allow_html=True)
 
                     if model == "Logistics Regression":
@@ -304,6 +325,11 @@ def main():
                         st.sidebar.write("")
                         st.sidebar.write("")
                         st.sidebar.write("")
+
+                    if model=="Naive Bayes Classifier":
+                        regressor = NaiveBayes_implementation(preprocessor, X_train, y_train, X_test, y_test)
+                        predictions(independent_features, numerical_features, categorical_features, dependent_feature, regressor,df)
+                        
                     
                     if model == "K-Nearest Neighbour Classifier":
                         regressor = Knn_classification_implementation(preprocessor, X_train, y_train, X_test, y_test)
@@ -348,7 +374,7 @@ def main():
                     if model == "Linear Regression":
                         regressor = Linear_Regression_Implementation(preprocessor, X_train, y_train, X_test, y_test)
                         predictions(independent_features, numerical_features, categorical_features, dependent_feature, regressor, df)
-
+                        
                     if model == "Ridge Regression":
                         regressor = Ridge_Regression_Implementation(preprocessor, X_train, y_train, X_test, y_test)
                         predictions(independent_features, numerical_features, categorical_features, dependent_feature, regressor, df)
@@ -399,10 +425,407 @@ def main():
                         predictions(independent_features, numerical_features, categorical_features, dependent_feature, regressor, df)
 
 
+# Visualizer
+def Vizualizer():
+    Algo_List =  ["Linear Regression", "Lasso Regression", 'Ridge Regression', 'Logistics Regression', 'Naive Bayes Classifier', "K Nearest Neighbours", "Support Vector Machine", "Decision Tree", "Random Forest", "Adaptive Boosting", "Gradient Boosting", "XGBoost"]
+    selected_algorithm = st.selectbox("Select ML Algorithm", Algo_List)
+    st.markdown(f"""<center><h3>{selected_algorithm}</h3></center>""", unsafe_allow_html=True)
+
+
+    if selected_algorithm=="Linear Regression":   
+        X, y = Regression_Datasets()        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+
+        regressor = LinearRegression()
+        regressor.fit(X_train, y_train)
+        regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+    if selected_algorithm=="Ridge Regression":
+        X, y = Regression_Datasets()        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+        
+        alpha,solver,max_iter = Ridge_Regression_Sidebar()
+        regressor = Ridge(alpha=alpha,solver=solver,max_iter=max_iter)
+        regressor.fit(X_train, y_train)
+        regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+    
+    if selected_algorithm=="Lasso Regression":
+        X, y = Regression_Datasets()        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+        
+        alpha,max_iter = Lasso_Regression_Sidebar()
+        regressor = Ridge(alpha=alpha,max_iter=max_iter)
+        regressor.fit(X_train, y_train)
+        regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+    if selected_algorithm=='Logistics Regression':
+        penalty,solver,max_iter,cv = Logistics_sidebar()
+
+        X, y = Classification_Datasets()
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        clf1 = LogisticRegressionCV(cv=cv,penalty=penalty,solver=solver,max_iter=max_iter,multi_class='auto',l1_ratios=[0.01,0.2,0.001,0.05])
+        clf1.fit(X_train, y_train)
+
+        classification_visualizer(clf1, X, y,  X_test, y_test)
+
+    if selected_algorithm=='Naive Bayes Classifier':
+        nb_type = NaiveBayes_sidebar()
+
+        X, y = Classification_Datasets()
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        if nb_type == 'Gaussian':
+            clf1 = GaussianNB()
+        elif nb_type == 'Multinomial':
+            clf1 = MultinomialNB()
+        elif nb_type == 'Bernoulli':
+            clf1 = BernoulliNB()
+
+        clf1.fit(X_train, y_train)
+
+        classification_visualizer(clf1, X, y,  X_test, y_test)
+        
+    if selected_algorithm=='K Nearest Neighbours':
+        model = st.selectbox("Select Model", ['K Neares Neighbour Regressor', 'K Neares Neighbour Classifier'])
+
+        if model == 'K Neares Neighbour Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            n_neighbour, weights, algorithm, metric = Knn_sidebar_regressor(y_train)
+
+            regressor = KNeighborsRegressor(
+                            n_neighbors=n_neighbour,
+                            weights=weights,
+                            algorithm=algorithm,
+                            metric=metric
+                        )
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'K Neares Neighbour Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            n_neighbour, weights, algorithm, metric = Knn_sidebar_classifier(y_train)
+
+            clf1 = KNeighborsClassifier(n_neighbors=n_neighbour,weights=weights,algorithm=algorithm,metric=metric)
+
+            clf1.fit(X_train, y_train)
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+            
+    if selected_algorithm=='Support Vector Machine':
+        model = st.selectbox("Select Model", ['Support Vector Regressor', 'Support Vector Classifier'])
+
+        if model == 'Support Vector Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            kernel, C, degree = Svm_regression_sidebar()
+
+            regressor = SVR(kernel=kernel, C=C,  degree=degree)
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'Support Vector Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            kernel, C,  degree= Svm_sidebar_classifier()
+
+            clf1 = SVC(kernel=kernel, C=C, degree=degree)
+
+            clf1.fit(X_train, y_train)
+
+            def hinge_loss(y_true, y_pred):
+                import numpy as np
+                loss = np.maximum(0, 1 - y_true * y_pred)
+                avg_loss = np.mean(loss)
+                return avg_loss
+            
+            y_pred = clf1.predict(X_test)
+            col1, col2 = st.columns(2)
+            with col1:
+                st.subheader(f"Accuracy Score - {round(accuracy_score(y_test, y_pred)*100, 2)}%")
+
+            with col2:
+                loss = hinge_loss(y_test, y_pred)
+                st.subheader(f"Hinge Loss - {round(loss, 2)}")
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+     
+    if selected_algorithm=='Decision Tree':
+        model = st.selectbox("Select Model", ['Decision Tree Regressor', 'Decision Tree Classifier'])
+
+        if model == 'Decision Tree Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            criterion, max_depth, min_samples_split, min_samples_leaf, max_features = Decision_Tree_Regressor_Sidebar()
+
+            regressor = DecisionTreeRegressor(
+                            criterion=criterion,
+                            max_depth=max_depth,
+                            min_samples_split=min_samples_split,
+                            min_samples_leaf=min_samples_leaf,
+                            max_features=max_features
+                        )
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'Decision Tree Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            criterion, max_depth, min_samples_split, min_samples_leaf, max_features = Decision_Tree_Classifier_Sidebar()
+
+            clf1 = DecisionTreeClassifier(
+                        criterion=criterion,
+                        max_depth=max_depth,
+                        min_samples_split=min_samples_split,
+                        min_samples_leaf=min_samples_leaf,
+                        max_features=max_features
+                    )
+
+            clf1.fit(X_train, y_train)
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+     
+    if selected_algorithm=='Random Forest':
+        model = st.selectbox("Select Model", ['Random Forest Regressor', 'Random Forest Classifier'])
+
+        if model == 'Random Forest Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            n_estimators, criterion, max_depth, min_samples_split, min_samples_leaf, max_features = Random_Forest_Regressor_Sidebar()
+
+            regressor = RandomForestRegressor(
+                            n_estimators=n_estimators,
+                            criterion=criterion,
+                            max_depth=max_depth,
+                            min_samples_split=min_samples_split,
+                            min_samples_leaf=min_samples_leaf,
+                            max_features=max_features
+                        )
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'Random Forest Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            n_estimators, criterion, max_depth, min_samples_split, min_samples_leaf, max_features = Random_Forest_Classifier_Sidebar()
+
+            clf1 = RandomForestClassifier(
+                        n_estimators=n_estimators,
+                        criterion=criterion,
+                        max_depth=max_depth,
+                        min_samples_split=min_samples_split,
+                        min_samples_leaf=min_samples_leaf,
+                        max_features=max_features
+                    )
+                    
+            clf1.fit(X_train, y_train)
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+
+    if selected_algorithm=="Adaptive Boosting":
+        model = st.selectbox("Select Model", ['Adaptive Boosting Regressor', 'Adaptive Boosting Classifier'])
+
+        if model == 'Adaptive Boosting Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            n_estimators, learning_rate, loss = AdaBoost_Regressor_Sidebar()
+
+            regressor = AdaBoostRegressor(
+                            n_estimators=n_estimators,
+                            learning_rate=learning_rate,
+                            loss=loss
+                        )
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'Adaptive Boosting Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            n_estimators, learning_rate, algorithm = AdaBoost_Classifier_Sidebar()
+
+            clf1 = AdaBoostClassifier(
+                        n_estimators=n_estimators,
+                        learning_rate=learning_rate,
+                        algorithm=algorithm
+                    )
+                    
+            clf1.fit(X_train, y_train)
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+     
+    if selected_algorithm=="Gradient Boosting":
+        model = st.selectbox("Select Model", ['Gradient Boosting Regressor', 'Gradient Boosting Classifier'])
+
+        if model == 'Gradient Boosting Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            n_estimators, learning_rate, loss, max_depth, min_samples_split, min_samples_leaf, max_features = Gradient_Boosting_Regressor_Sidebar()
+
+            regressor =  GradientBoostingRegressor(
+                            n_estimators=n_estimators,
+                            learning_rate=learning_rate,
+                            loss=loss,
+                            max_depth=max_depth,
+                            min_samples_split=min_samples_split,
+                            min_samples_leaf=min_samples_leaf,
+                            max_features=max_features
+                        )
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'Gradient Boosting Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            n_estimators, learning_rate, criterion, max_depth, min_samples_split, min_samples_leaf, max_features = Gradient_Boosting_Classifier_Sidebar()
+
+            clf1 = GradientBoostingClassifier(
+                        n_estimators=n_estimators,
+                        learning_rate=learning_rate,
+                        criterion=criterion,
+                        max_depth=max_depth,
+                        min_samples_split=min_samples_split,
+                        min_samples_leaf=min_samples_leaf,
+                        max_features=max_features
+                    )
+                    
+            clf1.fit(X_train, y_train)
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+     
+    if selected_algorithm=="XGBoost":
+        model = st.selectbox("Select Model", ['XGBoost Regressor', 'XGBoost Classifier'])
+
+        if model == 'XGBoost Regressor':
+            X, y = Regression_Datasets()        
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            n_estimators, learning_rate, max_depth, min_child_weight, gamma = XGBoost_Regressor_Sidebar()
+
+            regressor =  XGBRegressor(
+                            n_estimators=n_estimators,
+                            learning_rate=learning_rate,
+                            max_depth=max_depth,
+                            min_child_weight=min_child_weight,
+                            gamma=gamma,
+                        )
+
+            regressor.fit(X_train, y_train)
+            regression_visulizer(regressor,X_test,y_test,X_train,y_train,scaler, X, y)
+
+        if model == 'XGBoost Classifier':
+            X, y = Classification_Datasets()
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+            n_estimators, learning_rate, max_depth, min_child_weight, gamma = XGBoost_Classifier_Sidebar()
+
+            clf1 = XGBClassifier(
+                        n_estimators=n_estimators,
+                        learning_rate=learning_rate,
+                        max_depth=max_depth,
+                        min_child_weight=min_child_weight,
+                        gamma=gamma
+                    )
+                    
+            clf1.fit(X_train, y_train)
+
+            classification_visualizer(clf1, X, y,  X_test, y_test)
+    
+
+
+
+def  streamlit_menu():
+
+    st.markdown("<h2><center>Machine Learning Fine Tuner</center></h2>",unsafe_allow_html=True)
+    
+    selected_option = option_menu(
+        None,
+        ["Train Model", "Visualize Model", "AI ChatBot"],
+        icons = ['house', 'map', 'robot'],
+        default_index=0,
+        orientation='horizontal',
+
+        styles={
+            "container": {"padding": "0", "background-color": "#051937"},
+            "icon": {"color": "white", "font-size": "20px"}, 
+            "nav-link": {"font-size": "15px", "text-align": "center", "margin":"1px", "--hover-color": "#0ABA7D"},
+            "nav-link-selected": {"background-color": "#0ABA7D"},
+        }
+    )
+
+    return selected_option
+
 
 if __name__=="__main__":
     try:
-        main()
+        selected = streamlit_menu()
+        if selected=="Train Model": 
+            main()
+        if selected=="Visualize Model":
+            Vizualizer()
+        if selected=="AI ChatBot":
+            from chatbot import chat
+            chat()
+            pass
 
     except Exception as e:
         st.error(f"Error has occured - {e}")

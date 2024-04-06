@@ -1,6 +1,6 @@
 import streamlit as st
 from sklearn.pipeline import Pipeline
-from metrics import classifier_metrics, regression_metrics
+from metrics import classifier_metrics, regression_metrics, regression_visulizer
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 
 # Decision Tree Regressor
@@ -62,6 +62,7 @@ def Decision_Tree_Regressor_Implementation(preprocessor,X_train, y_train, X_test
     y_pred = model.predict(X_test)
 
     regression_metrics(y_test, y_pred)
+    regression_visulizer(model,X_test,y_test,X_train,y_train,scaler=None, X=None, y=None)
 
     return model
 

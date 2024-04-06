@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from sklearn.pipeline import Pipeline
-from metrics import classifier_metrics, regression_metrics
+from metrics import classifier_metrics, regression_metrics, regression_visulizer
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.metrics import mean_absolute_error, r2_score, accuracy_score, log_loss
 
@@ -47,6 +47,8 @@ def Knn_sidebar_regressor(y_train):
             - *minkowski*: Minkowski distance with a parameter p.
             """
         )
+    st.sidebar.header("")
+    st.sidebar.header("")
 
     return  n_neighbour, weights, algorithm, metric
 
@@ -144,6 +146,8 @@ def Knn_Regression_Implementation(preprocessor, X_train, y_train, X_test, y_test
 
     y_pred = model.predict(X_test)
     regression_metrics(y_test, y_pred)
+    regression_visulizer(model,X_test,y_test,X_train,y_train,scaler=None, X=None, y=None)
+
     Knn_plot_regressor(X_train, y_train, X_test, y_test, preprocessor, weights, algorithm, metric)
 
     return model
@@ -190,6 +194,8 @@ def Knn_sidebar_classifier(y_train):
             - *minkowski*: Minkowski distance with a parameter p.
             """
         )
+    st.sidebar.header("")
+    st.sidebar.header("")
 
     return  n_neighbour, weights, algorithm, metric
 

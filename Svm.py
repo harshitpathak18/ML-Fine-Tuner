@@ -3,7 +3,7 @@ import streamlit as st
 from sklearn.svm import SVC, SVR
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
-from metrics import classifier_metrics, regression_metrics, plot_confusion_matrix, plot_roc_curve
+from metrics import classifier_metrics, regression_metrics, plot_confusion_matrix, plot_roc_curve, regression_visulizer
 
 
 def hinge_loss(y_true, y_pred):
@@ -41,6 +41,11 @@ def Svm_regression_sidebar():
            """
         )
 
+    st.sidebar.title("")
+    st.sidebar.title("")
+    st.sidebar.title("")
+    st.sidebar.title("")
+
     return kernel, C,  degree
 
 def Svm_regression_implementation(preprocessor, X_train, y_train, X_test, y_test):
@@ -55,6 +60,8 @@ def Svm_regression_implementation(preprocessor, X_train, y_train, X_test, y_test
     y_pred = model.predict(X_test)
 
     regression_metrics(y_test, y_pred)
+    regression_visulizer(model,X_test,y_test,X_train,y_train,scaler=None, X=None, y=None)
+
     loss = hinge_loss(y_test, y_pred)
     st.subheader(f"Hinge Loss - {round(loss, 2)}")
 

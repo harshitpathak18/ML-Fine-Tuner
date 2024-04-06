@@ -1,0 +1,12 @@
+numpy
+pandas
+plotly
+mlxtend
+seaborn
+xgboost
+protobuf
+streamlit
+matplotlib
+scikit-learn
+google-generativeai
+streamlit-option-menu
