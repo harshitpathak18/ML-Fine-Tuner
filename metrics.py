@@ -125,12 +125,13 @@ def classification_visualizer(clf1,X, y, X_test,y_test):
 
         # Add contour plot for decision regions
         fig.add_trace(go.Contour(x=xx[0], y=yy[:, 0], z=Z,
-                                colorscale='Viridis', showscale=False,
-                                opacity=0.5))
+                                colorscale='blues', showscale=False,
+                                opacity=1))
 
         # Add scatter plot for data points
+        colorsclale_options=['viridis', 'electric','edge']
         fig.add_trace(go.Scatter(x=X[:, 0], y=X[:, 1], mode='markers', 
-                                marker=dict(color=y, colorscale='RdBu', size=10),
+                                marker=dict(color=y, colorscale='electric', size=10),
                                 showlegend=False))
 
         fig.update_layout(title="Classifier Decision Regions",

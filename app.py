@@ -80,15 +80,14 @@ def streamlit_style():
         }
         
         /*Cvs file uploader*/
-        .st-emotion-cache-1erivf3,.st-da, .st-emotion-cache-1erivf3, .st-ek, .st-gf, .st-hf, .st-am{
-            background-image: linear-gradient(to right top, #1d3354, #25537b, #2576a2, #1e9bc8, #12c2eb);
+        .st-emotion-cache-1erivf3, .st-da, .st-ek, .st-gf, .st-am{
+            background: linear-gradient(to right top, #1d3354, #25537b, #2576a2, #1e9bc8, #12c2eb);
         }
 
         /*fileUploadLabel*/
         .st-emotion-cache-19rxjzo.ef3psqc12{
             color:black;
         }
-
 
         .st-emotion-cache-19rxjzo{
             background-color:white;

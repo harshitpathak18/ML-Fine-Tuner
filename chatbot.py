@@ -3,7 +3,7 @@ import os
 import streamlit as st
 import google.generativeai as genai
 
-genai.configure(api_key="google gen-ai")
+genai.configure(api_key="AIzaSyCn5BtlnY1xwzvQm_MgMlUIHIxJ_AyT7Tk")
 
 st.markdown("""
     <style>
@@ -51,27 +51,23 @@ def chat():
             st.markdown(message['content'])
 
     # Get user input
-    st.sidebar.title("")
-    st.sidebar.markdown("<center><h2>Luna The Chatbot</h2></center>", unsafe_allow_html=True)
+    st.sidebar.subheader("")
+    st.sidebar.markdown("<center><h2>AI LUNA</h2></center>", unsafe_allow_html=True)
     prompt = st.sidebar.chat_input('Ask any question...')
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.title("")
-    st.sidebar.write("")
+    
+
+
+    txt = """Luna an AI Chatbot who can answer questions related to machine learning. I can help you with a variety of topics, including:
+            \n1. Supervised learning, \n2. Unsupervised learning, \n3. Reinforcement learning, \n4. Natural language processing \n5. Computer vision"""
+    st.sidebar.info(txt)
+
+    
 
     # Process user input and AI response
     if prompt:
         # Display user message in chat message container
         with st.chat_message('User'):
-            st.markdown(prompt)
+            st.markdown(str.capitalize(prompt))
 
         # Add user message to chat history
         st.session_state.messages.append(
