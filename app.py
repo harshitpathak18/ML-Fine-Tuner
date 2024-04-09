@@ -11,7 +11,9 @@ from sklearn.compose import ColumnTransformer
 from streamlit_option_menu import option_menu
 from sklearn.model_selection import train_test_split
 from mlxtend.plotting import plot_decision_regions, plot_learning_curves
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, LabelEncoder
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, LabelEncoder, OrdinalEncoder
+import numpy as np
+
 
 
 import plotly.express as px
@@ -201,6 +203,7 @@ def predictions(independent_features, numerical_features, categorical_features, 
 
         # Make prediction
         pred = st.button("Predict")
+        # st.write(Ordinal_Dependent_Feature)
         if pred:
             prediction = model.predict(input_data)
             st.write(f"Predicted {dependent_feature}: {round(prediction[0])}")
@@ -218,12 +221,13 @@ def predictions(independent_features, numerical_features, categorical_features, 
                 mime='application/octet-stream'
             )
 
-
+    return pred
 
 
 # main
 def main():
     uploaded_file = st.file_uploader("Upload Preprocessed CSV File", type=['csv'])
+    encoder = OrdinalEncoder()
 
     if uploaded_file is not None:
         # loading data
@@ -232,14 +236,22 @@ def main():
         # displaying options for user to select features    
         st.title(" ")
         dependent_feature,independent_features =  dep_indep_features(df)
-
+        
         
         # Calculate the correlation matrix
         if dependent_feature and independent_features:
+            if df[dependent_feature].dtype=='object':
+                
+                df[dependent_feature] = encoder.fit_transform(np.reshape(df[dependent_feature],(-1,1)))
+                
+                st.subheader("Ordinal Encoding Is Applied on Dependent Feature")
+                st.write(list(encoder.categories_[0]))
+
+
+
             features = independent_features + [dependent_feature]
             numerical_features = [feature for feature in features if df[feature].dtype != 'O']
             categorical_features = [feature for feature in features if df[feature].dtype == 'O']
-
 
 
             # displaying correlation matrix
@@ -253,9 +265,12 @@ def main():
                 Test_size = st.slider('Select Test Size (in percentage): ', 5, 50, value=20) / 100
             with c2:
                 random_ = st.slider('Select Random State: ', 1, 100, value=42)
+            
+            
 
             X = df[independent_features]
             y = df[dependent_feature]
+
 
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=Test_size, random_state=random_)
 
@@ -306,13 +321,14 @@ def main():
                     transformers=[
                         ('num', numerical_transformer, numerical_features),
                         ('cat', categorical_transformer, categorical_features)
-                    ])
+                    ], remainder='passthrough')
 
 
                 st.title("")
                 
                 
-                if len(y.unique())<20:
+                if len(y.unique())<40:
+
                     # Select Algorithm
                     model = st.selectbox("Select Machine Learning Algorithm", ['Logistics Regression',"Naive Bayes Classifier",'K-Nearest Neighbour Classifier','Support Vector Machine Classifier','Decision Tree Classifier', "Random Forest Classifier", "Gradient Boosting Classifier", "AdaBoost Classifier", "XGBoost Classifier"])
                     st.markdown(f"<br><h2><center>{model}</h2></center><br>",unsafe_allow_html=True)
@@ -360,8 +376,7 @@ def main():
 
                     if model =='XGBoost Classifier':
                         regressor = XGBoost_Classifier_Implementation(preprocessor,X_train, y_train, X_test, y_test)
-                        predictions(independent_features, numerical_features, categorical_features, dependent_feature, regressor, df)
-
+                        pred = predictions(independent_features, numerical_features, categorical_features, dependent_feature, regressor, df)
                     
 
 
@@ -788,7 +803,6 @@ def Vizualizer():
             clf1.fit(X_train, y_train)
 
             classification_visualizer(clf1, X, y,  X_test, y_test)
-    
 
 
 
